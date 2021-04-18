@@ -15,7 +15,7 @@ public class RedisModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    install(OkaeriConfigModule.create(path.resolve("redis.hjson"), RedisConfig.class));
+    install(new OkaeriConfigModule<>(path.resolve("redis.hjson"), RedisConfig.class));
     install(new RedisClientModule());
   }
 }

@@ -12,7 +12,7 @@ public class OkaeriConfigModule<T extends OkaeriConfig> extends AbstractModule {
   private final T config;
   private final Class<T> clazz;
 
-  OkaeriConfigModule(Path path, Class<T> clazz) {
+  public OkaeriConfigModule(Path path, Class<T> clazz) {
     this.clazz = clazz;
     this.config = ConfigManager.create(clazz, (it) -> {
       it.withBindFile(path.toFile());
@@ -20,10 +20,6 @@ public class OkaeriConfigModule<T extends OkaeriConfig> extends AbstractModule {
       it.saveDefaults();
       it.load(true);
     });
-  }
-
-  public static <T extends OkaeriConfig> OkaeriConfigModule<T> create(Path path, Class<T> clazz) {
-    return new OkaeriConfigModule<>(path, clazz);
   }
 
   @Override
