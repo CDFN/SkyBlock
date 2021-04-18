@@ -24,7 +24,6 @@ repositories {
 dependencies {
     // We use backport as Minecraft uses Guava 21. Guice 5.0.1 originally is
     // made with newer version.
-//    implementation 'ca.stellardrift.guice-backport:guice:5.0.1'
     compileOnly 'com.velocitypowered:velocity-api:1.0.0-SNAPSHOT'
     annotationProcessor 'com.velocitypowered:velocity-api:1.0.0-SNAPSHOT'
     implementation 'eu.okaeri:okaeri-configs-hjson:2.7.0'
