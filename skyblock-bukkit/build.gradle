@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'kr.entree.spigradle' version '2.2.3'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
+group 'io.github.cdfn'
+version '1.0.0'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+    paper()
+    maven {
+        name = "okaeri"
+        url = "https://storehouse.okaeri.eu/repository/maven-public/"
+    }
+    maven {
+        name = "minebench"
+        url = "https://repo.minebench.de/"
+    }
+}
+
+dependencies {
+    compileOnly paper("1.16.5")
+    // We use backport as Minecraft uses Guava 21. Guice 5.0.1 originally is
+    // made with newer version.
+    implementation 'ca.stellardrift.guice-backport:guice:5.0.1'
+    implementation 'de.themoep:minedown-adventure:1.7.0-SNAPSHOT'
+    implementation 'eu.okaeri:okaeri-configs-hjson:2.7.0'
+    implementation 'eu.okaeri:okaeri-configs-validator-okaeri:2.6.4'
+}
+tasks {
+    build.dependsOn shadowJar
+}
+spigot {
+    name = "SkyBlock"
+    authors = ["CDFN"]
+    version = project.version
+    website = "https://github.com/CDFN/"
+    apiVersion = "1.8"
+    debug {
+        buildVersion = "1.16.5"
+    }
+}

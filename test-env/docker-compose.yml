@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  velocity:
+    image: itzg/bungeecord
+    ports:
+      - 25565:25577
+    env_file:
+      - velocity-config/velocity.env
+    environment:
+      TYPE: "VELOCITY"
+      ENABLE_RCON: "FALSE"
+    secrets:
+      - velocity_secret
+    volumes:
+      - ./data/velocity:/server
+      - ./velocity-config/:/config
+
+  lobby:
+    image: itzg/minecraft-server
+    secrets:
+      - velocity_secret
+    env_file:
+      - velocity-config/velocity.env
+      - mc-config/mc.env
+    volumes:
+      - ./data/lobby:/data
+      - ./mc-config:/config
+
+  mc-1:
+    image: itzg/minecraft-server
+    secrets:
+      - velocity_secret
+    env_file:
+      - velocity-config/velocity.env
+      - mc-config/mc.env
+    volumes:
+      - ./data/mc-1:/data
+      - ./mc-config:/config
+
+  mc-2:
+    image: itzg/minecraft-server
+    secrets:
+      - velocity_secret
+    env_file:
+      - velocity-config/velocity.env
+      - mc-config/mc.env
+    volumes:
+      - ./data/mc-2:/data
+      - ./mc-config:/config
+
+secrets:
+  velocity_secret:
+    file: velocity-config/velocity_secret

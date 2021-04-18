@@ -1,0 +1,4 @@
+rootProject.name = 'skyblock'
+include 'skyblock-bukkit'
+include 'skyblock-velocity'
+
