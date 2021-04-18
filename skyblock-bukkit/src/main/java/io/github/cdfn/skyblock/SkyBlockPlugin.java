@@ -5,9 +5,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import io.github.cdfn.skyblock.commons.RedisClientFactory;
-import io.github.cdfn.skyblock.commons.config.RedisConfig;
-import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
+import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
+import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
 import java.nio.file.Path;
 import kr.entree.spigradle.annotations.PluginMain;
@@ -27,16 +26,14 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
   public void onEnable() {
     this.injector = Guice.createInjector(
         this,
-        OkaeriConfigModule.create(
-            this.getDataFolder().toPath().resolve("redis.hjson"),
-            RedisConfig.class
-        )
+        new RedisModule(this.getDataFolder().toPath())
     );
 
     var logger = this.getSLF4JLogger();
     var server = this.getServer();
+
     try {
-      var client = RedisClientFactory.createRedisClient(injector.getInstance(RedisConfig.class));
+      var client = injector.getInstance(RedisClient.class);
       var conn = client.connect().sync();
       logger.info("Redis response: {}", conn.ping());
     } catch (RedisConnectionException exception) {

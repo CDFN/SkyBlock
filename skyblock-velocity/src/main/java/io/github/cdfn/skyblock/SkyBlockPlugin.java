@@ -8,11 +8,9 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import io.github.cdfn.skyblock.commons.RedisClientFactory;
-import io.github.cdfn.skyblock.commons.config.RedisConfig;
-import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
+import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
+import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
-import io.lettuce.core.pubsub.RedisPubSubListener;
 import java.nio.file.Path;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
@@ -30,14 +28,14 @@ public class SkyBlockPlugin {
     this.server = server;
     this.logger = logger;
     this.injector = injector.createChildInjector(
-        OkaeriConfigModule.create(path.resolve("redis.hjson"), RedisConfig.class)
+        new RedisModule(path)
     );
   }
 
   @Subscribe
   public void onProxyInitialization(ProxyInitializeEvent event) {
     try {
-      var client = RedisClientFactory.createRedisClient(injector.getInstance(RedisConfig.class));
+      var client = this.injector.getInstance(RedisClient.class);
       var conn = client.connect().sync();
       logger.info("Redis response: {}", conn.ping());
     } catch (RedisConnectionException exception) {
