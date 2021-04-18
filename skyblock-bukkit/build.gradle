@@ -22,7 +22,7 @@ repositories {
 dependencies {
     compileOnly paper("1.16.5")
     implementation('ca.stellardrift.guice-backport:guice:5.0.1') {
-        because 'Minecraft uses Guava 21 so we neeed older Guava version in Guice.'
+        because 'Minecraft uses Guava 21 so we need older Guava version in Guice.'
     }
     implementation 'de.themoep:minedown-adventure:1.7.0-SNAPSHOT'
     implementation project(':skyblock-common')
