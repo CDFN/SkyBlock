@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'kr.entree.spigradle' version '2.2.3'
     id "com.github.johnrengelman.shadow" version "6.1.0"
 }
