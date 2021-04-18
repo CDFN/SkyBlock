@@ -18,7 +18,7 @@ public class OkaeriConfigModule<T extends OkaeriConfig> extends AbstractModule {
       it.withBindFile(path.toFile());
       it.withConfigurer(new HjsonConfigurer());
       it.saveDefaults();
-      it.load();
+      it.load(true);
     });
   }
 
