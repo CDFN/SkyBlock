@@ -16,5 +16,5 @@ repositories {
 dependencies {
     api 'io.lettuce:lettuce-core:6.1.1.RELEASE'
     api 'eu.okaeri:okaeri-configs-hjson:2.7.2'
-    api 'eu.okaeri:okaeri-configs-validator-okaeri:2.7.0'
+    api 'eu.okaeri:okaeri-configs-validator-okaeri:2.7.2'
 }
