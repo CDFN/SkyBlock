@@ -1,6 +1,10 @@
 version: "3"
 
 services:
+  redis:
+    image: redis
+    volumes:
+      - ./data/redis/:/data
   velocity:
     image: itzg/bungeecord
     ports:
