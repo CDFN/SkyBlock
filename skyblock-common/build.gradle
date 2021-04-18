@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+}
+
+group 'io.github.cdfn'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "okaeri"
+        url = "https://storehouse.okaeri.eu/repository/maven-public/"
+    }
+}
+
+dependencies {
+    api 'io.lettuce:lettuce-core:6.1.1.RELEASE'
+    api 'eu.okaeri:okaeri-configs-hjson:2.7.0'
+    api 'eu.okaeri:okaeri-configs-validator-okaeri:2.7.0'
+}

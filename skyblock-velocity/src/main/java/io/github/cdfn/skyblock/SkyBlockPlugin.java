@@ -18,6 +18,7 @@ public class SkyBlockPlugin {
   public SkyBlockPlugin(ProxyServer server, Logger logger) {
     this.server = server;
     this.logger = logger;
+
   }
 
   @Subscribe

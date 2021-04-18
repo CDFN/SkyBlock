@@ -25,16 +25,17 @@ repositories {
 
 dependencies {
     compileOnly paper("1.16.5")
-    // We use backport as Minecraft uses Guava 21. Guice 5.0.1 originally is
-    // made with newer version.
-    implementation 'ca.stellardrift.guice-backport:guice:5.0.1'
+    implementation('ca.stellardrift.guice-backport:guice:5.0.1') {
+        because 'Minecraft uses Guava 21 so we neeed older Guava version in Guice.'
+    }
     implementation 'de.themoep:minedown-adventure:1.7.0-SNAPSHOT'
-    implementation 'eu.okaeri:okaeri-configs-hjson:2.7.0'
-    implementation 'eu.okaeri:okaeri-configs-validator-okaeri:2.6.4'
+    implementation project(':skyblock-common')
 }
+
 tasks {
     build.dependsOn shadowJar
 }
+
 spigot {
     name = "SkyBlock"
     authors = ["CDFN"]

@@ -1,4 +1,5 @@
 rootProject.name = 'skyblock'
 include 'skyblock-bukkit'
 include 'skyblock-velocity'
+include 'skyblock-common'
 
