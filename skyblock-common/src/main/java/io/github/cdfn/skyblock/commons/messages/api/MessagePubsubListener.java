@@ -44,9 +44,7 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
 
       registry.callAll(clazz, messagePackSerializable);
     } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | IOException e) {
-      LOGGER
-          .error("error while handling message on channel {} with classname {}", channel, className,
-              e);
+      LOGGER.error("error while handling message on channel {} with classname {}", channel, className, e);
     }
   }
 
