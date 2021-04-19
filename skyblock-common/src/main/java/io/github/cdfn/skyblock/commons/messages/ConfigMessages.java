@@ -32,7 +32,7 @@ public class ConfigMessages{
     @Override
     public void deserialize(byte[] bytes) throws IOException {
       var unpacker = MessagePack.newDefaultUnpacker(bytes);
-      var returnValue = new ConfigRequest(unpacker.unpackInt());
+      this.id = unpacker.unpackInt();
       unpacker.close();
     }
 
