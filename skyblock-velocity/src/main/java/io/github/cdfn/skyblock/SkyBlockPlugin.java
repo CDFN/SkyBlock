@@ -8,6 +8,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
@@ -42,5 +43,6 @@ public class SkyBlockPlugin {
       logger.error("Failed to connect to redis", exception);
       this.server.shutdown(Component.text("Failed to connect to Redis server"));
     }
+    injector.getInstance(MessagePubsubListener.class).register();
   }
 }

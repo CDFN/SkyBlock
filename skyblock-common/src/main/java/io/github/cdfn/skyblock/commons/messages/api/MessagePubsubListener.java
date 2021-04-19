@@ -2,6 +2,8 @@ package io.github.cdfn.skyblock.commons.messages.api;
 
 import com.google.inject.Inject;
 import io.github.cdfn.skyblock.commons.config.RedisConfig;
+import io.github.cdfn.skyblock.commons.messages.util.StringByteCodec;
+import io.lettuce.core.RedisClient;
 import io.lettuce.core.pubsub.RedisPubSubListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -11,11 +13,14 @@ import org.slf4j.LoggerFactory;
 public class MessagePubsubListener implements RedisPubSubListener<String, byte[]> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MessagePubsubListener.class);
+  private final RedisClient redisClient;
   private final RedisConfig config;
   private final MessageHandlerRegistry registry;
 
   @Inject
-  public MessagePubsubListener(RedisConfig config, MessageHandlerRegistry registry) {
+  public MessagePubsubListener(RedisClient redisClient, RedisConfig config,
+      MessageHandlerRegistry registry) {
+    this.redisClient = redisClient;
     this.config = config;
     this.registry = registry;
   }
@@ -38,13 +43,16 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
         return;
       }
 
-      MessagePackSerializable messagePackSerializable = ((Class<MessagePackSerializable>) clazz)
-          .getDeclaredConstructor().newInstance();
+      var messagePackSerializable = ((Class<MessagePackSerializable>) clazz)
+          .getDeclaredConstructor()
+          .newInstance();
       messagePackSerializable.deserialize(message);
 
       registry.callAll(clazz, messagePackSerializable);
     } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | IOException e) {
-      LOGGER.error("error while handling message on channel {} with classname {}", channel, className, e);
+      LOGGER
+          .error("error while handling message on channel {} with classname {}", channel, className,
+              e);
     }
   }
 
@@ -62,5 +70,12 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
 
   @Override
   public void punsubscribed(String pattern, long count) {
+  }
+
+  public void register() {
+    var conn = this.redisClient.connectPubSub(StringByteCodec.INSTANCE);
+    conn.addListener(this);
+    // Subscribe for all messages with prefix
+    conn.sync().subscribe(config.getPrefix() + "*");
   }
 }

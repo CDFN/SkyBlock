@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
+import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
@@ -40,6 +41,7 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
       logger.error("Failed to connect to redis", exception);
       server.shutdown();
     }
+    injector.getInstance(MessagePubsubListener.class).register();
   }
 
   @Override
