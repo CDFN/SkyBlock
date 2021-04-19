@@ -3,8 +3,6 @@ package io.github.cdfn.skyblock.commons.messages.api;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 @Singleton
