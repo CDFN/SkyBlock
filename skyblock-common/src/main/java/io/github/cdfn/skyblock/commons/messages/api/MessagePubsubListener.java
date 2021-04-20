@@ -14,14 +14,11 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MessagePubsubListener.class);
   private final RedisClient redisClient;
-  private final RedisConfig config;
   private final MessageHandlerRegistry registry;
 
   @Inject
-  public MessagePubsubListener(RedisClient redisClient, RedisConfig config,
-      MessageHandlerRegistry registry) {
+  public MessagePubsubListener(RedisClient redisClient, MessageHandlerRegistry registry) {
     this.redisClient = redisClient;
-    this.config = config;
     this.registry = registry;
   }
 
