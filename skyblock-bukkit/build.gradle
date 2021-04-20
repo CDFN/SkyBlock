@@ -17,10 +17,19 @@ repositories {
         name = "minebench"
         url = "https://repo.minebench.de/"
     }
+    maven {
+        name = "rapture"
+        url = "https://repo.rapture.pw/repository/maven-snapshots/"
+    }
+    maven {
+        name = "glare"
+        url = "https://repo.glaremasters.me/repository/concuncan/"
+    }
 }
 
 dependencies {
     compileOnly paper("1.16.5")
+    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.5.4-SNAPSHOT'
     implementation('ca.stellardrift.guice-backport:guice:5.0.1') {
         because 'Minecraft uses Guava 21 so we need older Guava version in Guice.'
     }
