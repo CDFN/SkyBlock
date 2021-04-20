@@ -74,6 +74,6 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
     var conn = this.redisClient.connectPubSub(StringByteCodec.INSTANCE);
     conn.addListener(this);
     // Subscribe for all messages with prefix
-    conn.sync().subscribe(RedisConfig.PREFIX + "*");
+    conn.sync().psubscribe(RedisConfig.PREFIX + "*");
   }
 }
