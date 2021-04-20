@@ -13,6 +13,8 @@ public class RedisLoader implements SlimeLoader {
 
   private static final String WORLD_DATA_PREFIX = "skyblock_world_data_";
   private static final String WORLD_LOCK_PREFIX = "skyblock_world_lock_";
+  private static final byte TRUE = 0x1;
+  private static final byte FALSE = 0x0;
 
   private final RedisCommands<String, byte[]> connection;
 
@@ -27,7 +29,7 @@ public class RedisLoader implements SlimeLoader {
       if (lock == null) {
         throw new UnknownWorldException(name);
       }
-      if (lock[0] == 0x1) {
+      if (lock[0] == TRUE) {
         throw new WorldInUseException(name);
       }
     }
@@ -52,7 +54,7 @@ public class RedisLoader implements SlimeLoader {
   @Override
   public void saveWorld(String name, byte[] bytes, boolean lock) throws IOException {
     connection.set(WORLD_DATA_PREFIX + name, bytes);
-    connection.set(WORLD_LOCK_PREFIX + name, new byte[]{(byte) (lock ? 0x1 : 0x0)});
+    connection.set(WORLD_LOCK_PREFIX + name, new byte[]{lock ? TRUE : FALSE});
   }
 
   @Override
@@ -61,7 +63,7 @@ public class RedisLoader implements SlimeLoader {
     if (!exists) {
       throw new UnknownWorldException(name);
     }
-    connection.set(WORLD_LOCK_PREFIX + name, new byte[]{(byte) 0x0});
+    connection.set(WORLD_LOCK_PREFIX + name, new byte[]{(byte) FALSE});
   }
 
   @Override
@@ -70,7 +72,7 @@ public class RedisLoader implements SlimeLoader {
     if (response == null) {
       throw new UnknownWorldException(name);
     }
-    return response[0] == 0x1;
+    return response[0] == TRUE;
   }
 
   @Override
