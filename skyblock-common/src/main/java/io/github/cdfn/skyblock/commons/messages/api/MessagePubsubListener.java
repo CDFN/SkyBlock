@@ -13,12 +13,10 @@ import org.slf4j.LoggerFactory;
 public class MessagePubsubListener implements RedisPubSubListener<String, byte[]> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MessagePubsubListener.class);
-  private final RedisClient redisClient;
   private final MessageHandlerRegistry registry;
 
   @Inject
-  public MessagePubsubListener(RedisClient redisClient, MessageHandlerRegistry registry) {
-    this.redisClient = redisClient;
+  public MessagePubsubListener(MessageHandlerRegistry registry) {
     this.registry = registry;
   }
 
@@ -67,8 +65,8 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
   public void punsubscribed(String pattern, long count) {
   }
 
-  public void register() {
-    var conn = this.redisClient.connectPubSub(StringByteCodec.INSTANCE);
+  public void register(RedisClient client) {
+    var conn = client.connectPubSub(StringByteCodec.INSTANCE);
     conn.addListener(this);
     // Subscribe for all messages with prefix
     conn.sync().psubscribe(RedisConfig.PREFIX + "*");

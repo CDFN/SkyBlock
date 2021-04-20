@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
+import com.grinderwolf.swm.api.SlimePlugin;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
@@ -14,6 +15,7 @@ import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
 import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
 import io.github.cdfn.skyblock.messages.handler.ConfigResponseHandler;
+import io.github.cdfn.skyblock.world.loader.RedisLoader;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
 import java.nio.file.Path;
@@ -21,6 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import kr.entree.spigradle.annotations.PluginMain;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.slf4j.Logger;
@@ -39,23 +42,39 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
         new OkaeriConfigModule<>(null, WorkerConfig.class)
     );
 
-    var logger = this.getSLF4JLogger();
-    var server = this.getServer();
-
     var client = injector.getInstance(RedisClient.class);
+    this.setupMessaging(
+        injector.getInstance(MessagePubsubListener.class),
+        injector.getInstance(MessageHandlerRegistry.class),
+        client
+    );
+
+    MessagePublisher.create(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
+
+    this.setupSlimeWorldManager(client);
+  }
+
+  private void setupSlimeWorldManager(RedisClient client) {
+    var slimePlugin = (SlimePlugin) this.getServer().getPluginManager().getPlugin("SlimeWorldManager");
+    if (slimePlugin == null) {
+      throw new UnknownDependencyException("No SlimeWorldManager found. Install it!");
+    }
+  }
+
+  private void setupMessaging(MessagePubsubListener listener, MessageHandlerRegistry registry, RedisClient client) {
+    var logger = this.getSLF4JLogger();
     try {
       var conn = client.connect().sync();
       logger.info("Redis response: {}", conn.ping());
     } catch (RedisConnectionException exception) {
       logger.error("Failed to connect to redis", exception);
-      server.shutdown();
+      this.getServer().shutdown();
     }
-    injector.getInstance(MessagePubsubListener.class).register();
-    injector.getInstance(MessageHandlerRegistry.class).addHandler(
+    listener.register(client);
+    registry.addHandler(
         ConfigResponse.class,
         injector.getInstance(ConfigResponseHandler.class)
     );
-    MessagePublisher.create(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
   }
 
   @Override

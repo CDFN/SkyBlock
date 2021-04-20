@@ -44,6 +44,14 @@ public class SkyBlockPlugin {
   @Subscribe
   public void onProxyInitialization(ProxyInitializeEvent event) {
     var client = this.injector.getInstance(RedisClient.class);
+    this.setupMessaging(
+        client,
+        injector.getInstance(MessagePubsubListener.class),
+        injector.getInstance(MessageHandlerRegistry.class)
+    );
+  }
+
+  private void setupMessaging(RedisClient client, MessagePubsubListener listener, MessageHandlerRegistry registry) {
     try {
       var conn = client.connect().sync();
       logger.info("Redis response: {}", conn.ping());
@@ -51,8 +59,8 @@ public class SkyBlockPlugin {
       logger.error("Failed to connect to redis", exception);
       this.server.shutdown(Component.text("Failed to connect to Redis server"));
     }
-    injector.getInstance(MessagePubsubListener.class).register();
-    injector.getInstance(MessageHandlerRegistry.class).addHandler(
+    listener.register(client);
+    registry.addHandler(
         ConfigRequest.class,
         injector.getInstance(ConfigRequestHandler.class)
     );

@@ -44,6 +44,7 @@ tasks {
 spigot {
     name = "SkyBlock"
     authors = ["CDFN"]
+    depends = ["SlimeWorldManager"]
     version = project.version
     website = "https://github.com/CDFN/"
     apiVersion = "1.16"
