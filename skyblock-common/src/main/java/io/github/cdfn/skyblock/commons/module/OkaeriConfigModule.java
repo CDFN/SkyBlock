@@ -14,12 +14,18 @@ public class OkaeriConfigModule<T extends OkaeriConfig> extends AbstractModule {
 
   public OkaeriConfigModule(Path path, Class<T> clazz) {
     this.clazz = clazz;
-    this.config = ConfigManager.create(clazz, (it) -> {
-      it.withBindFile(path.toFile());
-      it.withConfigurer(new HjsonConfigurer());
-      it.saveDefaults();
-      it.load(true);
-    });
+    if(path == null) {
+      this.config = ConfigManager.create(clazz, (it) -> {
+        it.withConfigurer(new HjsonConfigurer());
+      });
+    } else {
+      this.config = ConfigManager.create(clazz, (it) -> {
+        it.withBindFile(path.toFile());
+        it.withConfigurer(new HjsonConfigurer());
+        it.saveDefaults();
+        it.load(true);
+      });
+    }
   }
 
   @Override
