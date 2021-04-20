@@ -59,6 +59,7 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
     if (slimePlugin == null) {
       throw new UnknownDependencyException("No SlimeWorldManager found. Install it!");
     }
+    slimePlugin.registerLoader("redis", new RedisLoader(client));
   }
 
   private void setupMessaging(MessagePubsubListener listener, MessageHandlerRegistry registry, RedisClient client) {
