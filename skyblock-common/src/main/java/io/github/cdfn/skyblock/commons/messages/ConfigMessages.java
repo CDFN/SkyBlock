@@ -58,6 +58,7 @@ public class ConfigMessages{
     public MessageBufferPacker serialize() throws IOException {
       var packer = MessagePack.newDefaultBufferPacker();
       packer.packInt(this.id);
+      packer.packString(this.data);
       packer.close();
       return packer;
     }
