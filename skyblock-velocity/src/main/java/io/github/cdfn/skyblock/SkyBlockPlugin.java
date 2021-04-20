@@ -52,7 +52,9 @@ public class SkyBlockPlugin {
       this.server.shutdown(Component.text("Failed to connect to Redis server"));
     }
     injector.getInstance(MessagePubsubListener.class).register();
-    injector.getInstance(MessageHandlerRegistry.class).addHandler(ConfigRequest.class, new ConfigRequestHandler(client));
-    MessagePublisher.create(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
+    injector.getInstance(MessageHandlerRegistry.class).addHandler(
+        ConfigRequest.class,
+        injector.getInstance(ConfigRequestHandler.class)
+    );
   }
 }

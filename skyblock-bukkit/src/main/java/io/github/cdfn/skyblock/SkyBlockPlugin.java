@@ -5,11 +5,19 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
+import io.github.cdfn.skyblock.commons.config.WorkerConfig;
+import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
+import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
+import io.github.cdfn.skyblock.commons.messages.api.MessageHandlerRegistry;
+import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
+import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
+import io.github.cdfn.skyblock.messages.handler.ConfigResponseHandler;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
 import java.nio.file.Path;
+import java.util.concurrent.ThreadLocalRandom;
 import kr.entree.spigradle.annotations.PluginMain;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
@@ -27,14 +35,15 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
   public void onEnable() {
     this.injector = Guice.createInjector(
         this,
-        new RedisModule(this.getDataFolder().toPath())
+        new RedisModule(this.getDataFolder().toPath()),
+        new OkaeriConfigModule<>(null, WorkerConfig.class)
     );
 
     var logger = this.getSLF4JLogger();
     var server = this.getServer();
 
+    var client = injector.getInstance(RedisClient.class);
     try {
-      var client = injector.getInstance(RedisClient.class);
       var conn = client.connect().sync();
       logger.info("Redis response: {}", conn.ping());
     } catch (RedisConnectionException exception) {
@@ -42,6 +51,11 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
       server.shutdown();
     }
     injector.getInstance(MessagePubsubListener.class).register();
+    injector.getInstance(MessageHandlerRegistry.class).addHandler(
+        ConfigResponse.class,
+        injector.getInstance(ConfigResponseHandler.class)
+    );
+    MessagePublisher.create(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
   }
 
   @Override
