@@ -33,7 +33,7 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
   @SuppressWarnings("unchecked")
   public void message(String pattern, String channel, byte[] message) {
     // Strip channel's prefix so we get class name
-    var className = channel.replace(config.getPrefix(), "");
+    var className = channel.replace(RedisConfig.PREFIX, "");
     try {
       var clazz = Class.forName(className);
 
@@ -74,6 +74,6 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
     var conn = this.redisClient.connectPubSub(StringByteCodec.INSTANCE);
     conn.addListener(this);
     // Subscribe for all messages with prefix
-    conn.sync().subscribe(config.getPrefix() + "*");
+    conn.sync().subscribe(RedisConfig.PREFIX + "*");
   }
 }
