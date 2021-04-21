@@ -6,11 +6,22 @@ import io.github.cdfn.skyblock.commons.messages.util.StringByteCodec;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.pubsub.RedisPubSubListener;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.misc.Unsafe;
 
 public class MessagePubsubListener implements RedisPubSubListener<String, byte[]> {
+
+  private static Unsafe unsafe;
+  static {
+    try {
+      var field = Unsafe.class.getDeclaredField("theUnsafe");
+      field.setAccessible(true);
+      unsafe = (Unsafe) field.get(null);
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
+  }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MessagePubsubListener.class);
   private final MessageHandlerRegistry registry;
@@ -25,7 +36,6 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void message(String pattern, String channel, byte[] message) {
     // Strip channel's prefix so we get class name
     var className = channel.replace(RedisConfig.PREFIX, "");
@@ -38,13 +48,11 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
         return;
       }
 
-      var messagePackSerializable = ((Class<MessagePackSerializable>) clazz)
-          .getDeclaredConstructor()
-          .newInstance();
+      var messagePackSerializable = (MessagePackSerializable) unsafe.allocateInstance(clazz);
       messagePackSerializable.deserialize(message);
 
       registry.callAll(clazz, messagePackSerializable);
-    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | IOException e) {
+    } catch (ClassNotFoundException | InstantiationException | IOException e) {
       LOGGER.error("error while handling message on channel {} with classname {}", channel, className, e);
     }
   }

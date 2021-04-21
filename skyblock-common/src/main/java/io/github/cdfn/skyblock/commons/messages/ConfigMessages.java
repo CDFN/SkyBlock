@@ -14,9 +14,6 @@ public class ConfigMessages{
 
     private int id;
 
-    public ConfigRequest() {
-    }
-
     public ConfigRequest(int id) {
       this.id = id;
     }
@@ -45,9 +42,6 @@ public class ConfigMessages{
 
     private int id;
     private String data;
-
-    public ConfigResponse() {
-    }
 
     public ConfigResponse(int id, String data) {
       this.id = id;
