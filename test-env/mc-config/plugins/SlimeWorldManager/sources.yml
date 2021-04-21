@@ -1,0 +1,4 @@
+file:
+    path: slime_worlds
+redis:
+  enabled: true
