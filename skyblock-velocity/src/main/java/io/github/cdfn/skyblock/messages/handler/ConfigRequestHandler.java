@@ -24,7 +24,7 @@ public class ConfigRequestHandler implements MessageHandler<ConfigRequest> {
 
   @Override
   public void accept(ConfigRequest configRequest) {
-    MessagePublisher.create(client).publish(new ConfigResponse(configRequest.getId(), workerConfig.saveToString()));
+    MessagePublisher.get(client).publish(new ConfigResponse(configRequest.getId(), workerConfig.saveToString()));
   }
 
   @Override

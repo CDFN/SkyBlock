@@ -49,7 +49,7 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
         client
     );
 
-    MessagePublisher.create(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
+    MessagePublisher.get(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
 
     this.setupSlimeWorldManager();
   }
