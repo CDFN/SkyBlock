@@ -9,6 +9,7 @@ import io.lettuce.core.api.sync.RedisCommands;
 import java.io.IOException;
 import java.util.List;
 
+@Deprecated
 public class RedisLoader implements SlimeLoader {
 
   private static final String WORLD_DATA_PREFIX = "skyblock_world_data_";

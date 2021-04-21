@@ -1,4 +1,10 @@
-file:
-    path: slime_worlds
-redis:
+mysql:
   enabled: true
+  host: mariadb
+  port: 3306
+  username: skyblock
+  password: skyblock
+  database: skyblock
+  usessl: false
+redis:
+  enabled: false

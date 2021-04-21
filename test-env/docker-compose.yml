@@ -5,6 +5,12 @@ services:
     image: redis
     volumes:
       - ./data/redis/:/data
+  mariadb:
+    image: mariadb
+    volumes:
+      - ./data/redis/:/var/lib/mysql
+    env_file:
+      - db-config/db.env
   velocity:
     image: itzg/bungeecord
     ports:
