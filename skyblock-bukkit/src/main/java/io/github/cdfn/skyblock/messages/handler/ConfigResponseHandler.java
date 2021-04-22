@@ -3,11 +3,12 @@ package io.github.cdfn.skyblock.messages.handler;
 import com.google.inject.Inject;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
-import io.github.cdfn.skyblock.commons.messages.api.MessageHandler;
+import io.github.cdfn.skyblock.commons.messages.api.AbstractMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConfigResponseHandler implements MessageHandler<ConfigResponse> {
+public class ConfigResponseHandler extends AbstractMessageHandler<ConfigResponse> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigResponseHandler.class);
   private final WorkerConfig workerConfig;
 
@@ -20,10 +21,5 @@ public class ConfigResponseHandler implements MessageHandler<ConfigResponse> {
   public void accept(ConfigResponse configResponse) {
     workerConfig.load(configResponse.getData());
     LOGGER.info("Loaded config from manager");
-  }
-
-  @Override
-  public boolean isOneTime() {
-    return true;
   }
 }

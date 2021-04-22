@@ -4,13 +4,14 @@ import com.google.inject.Inject;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
+import io.github.cdfn.skyblock.commons.messages.api.AbstractMessageHandler;
 import io.github.cdfn.skyblock.commons.messages.api.MessageHandler;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.lettuce.core.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConfigRequestHandler implements MessageHandler<ConfigRequest> {
+public class ConfigRequestHandler extends AbstractMessageHandler<ConfigRequest> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigRequestHandler.class);
   private final RedisClient client;
@@ -18,6 +19,7 @@ public class ConfigRequestHandler implements MessageHandler<ConfigRequest> {
 
   @Inject
   public ConfigRequestHandler(RedisClient client, WorkerConfig workerConfig) {
+    super(false);
     this.client = client;
     this.workerConfig = workerConfig;
   }
@@ -25,10 +27,5 @@ public class ConfigRequestHandler implements MessageHandler<ConfigRequest> {
   @Override
   public void accept(ConfigRequest configRequest) {
     MessagePublisher.get(client).publish(new ConfigResponse(configRequest.getId(), workerConfig.saveToString()));
-  }
-
-  @Override
-  public boolean isOneTime() {
-    return false;
   }
 }
