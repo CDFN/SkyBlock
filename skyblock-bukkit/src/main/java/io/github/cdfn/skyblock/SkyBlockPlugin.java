@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.grinderwolf.swm.api.SlimePlugin;
+import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
@@ -60,6 +61,11 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
       this.getServer().shutdown();
       throw new UnknownDependencyException("No SlimeWorldManager found. Install it!");
     }
+
+    this.injector = injector.createChildInjector(binder -> {
+        binder.bind(SlimeLoader.class).toInstance(slimePlugin.getLoader("mysql"));
+        binder.bind(SlimePlugin.class).toInstance(slimePlugin);
+    });
   }
 
   private void setupMessaging(MessagePubsubListener listener, MessageHandlerRegistry registry, RedisClient client) {
