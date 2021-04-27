@@ -5,10 +5,7 @@ import java.io.IOException;
 import org.msgpack.core.MessageBufferPacker;
 import org.msgpack.core.MessagePack;
 
-public class ConfigMessages{
-
-  private static final String CHANNEL_NAME_REQ = "config_messages_req";
-  private static final String CHANNEL_NAME_RES = "config_messages_res";
+public class ConfigMessages {
 
   public static class ConfigRequest implements MessagePackSerializable {
 
