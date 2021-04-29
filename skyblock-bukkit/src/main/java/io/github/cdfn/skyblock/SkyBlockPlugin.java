@@ -10,6 +10,8 @@ import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
+import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages.PlayerDataRequest;
+import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages.PlayerDataResponse;
 import io.github.cdfn.skyblock.commons.messages.api.MessageHandlerRegistry;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
@@ -17,6 +19,8 @@ import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
 import io.github.cdfn.skyblock.listener.DataSynchronizationListener;
 import io.github.cdfn.skyblock.messages.handler.ConfigResponseHandler;
+import io.github.cdfn.skyblock.messages.handler.PlayerDataRequestHandler;
+import io.github.cdfn.skyblock.messages.handler.PlayerDataResponseHandler;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
 import java.io.IOException;
@@ -86,6 +90,14 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
     registry.addHandler(
         ConfigResponse.class,
         injector.getInstance(ConfigResponseHandler.class)
+    );
+    registry.addHandler(
+        PlayerDataRequest.class,
+        injector.getInstance(PlayerDataRequestHandler.class)
+    );
+    registry.addHandler(
+        PlayerDataResponse.class,
+        injector.getInstance(PlayerDataResponseHandler.class)
     );
   }
 
