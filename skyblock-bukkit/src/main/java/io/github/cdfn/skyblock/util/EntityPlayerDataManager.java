@@ -28,7 +28,7 @@ public class EntityPlayerDataManager {
   private static final Method CRAFT_PLAYER_GET_HANDLE_METHOD;
 
   private static final Class<?> ENTITY_PLAYER_CLASS;
-  private static final Method ENTITY_PLAYER_SAVE_DATA_METHOD;
+  private static final Method ENTITY_PLAYER_SAVE_METHOD;
 
   private static final Class<?> NBT_COMPRESSED_STREAM_TOOLS_CLASS;
   private static final Method NBT_COMPRESSED_STREAM_TOOLS_TO_OUTPUT_STREAM_METHOD;
@@ -42,7 +42,7 @@ public class EntityPlayerDataManager {
       CRAFT_PLAYER_GET_HANDLE_METHOD = CRAFT_PLAYER_CLASS.getMethod("getHandle");
 
       ENTITY_PLAYER_CLASS = Class.forName(String.format(FORMAT, "EntityPlayer"));
-      ENTITY_PLAYER_SAVE_DATA_METHOD = ENTITY_PLAYER_CLASS.getMethod("saveData", NBT_TAG_COMPOUND_CLASS);
+      ENTITY_PLAYER_SAVE_METHOD = ENTITY_PLAYER_CLASS.getMethod("save", NBT_TAG_COMPOUND_CLASS);
 
       NBT_COMPRESSED_STREAM_TOOLS_CLASS = Class.forName(String.format(FORMAT, "NBTCompressedStreamTools"));
       NBT_COMPRESSED_STREAM_TOOLS_TO_OUTPUT_STREAM_METHOD = NBT_COMPRESSED_STREAM_TOOLS_CLASS.getMethod("a", NBT_TAG_COMPOUND_CLASS, OutputStream.class);
@@ -62,9 +62,7 @@ public class EntityPlayerDataManager {
 
   public static byte[] readPlayerNBT(Player player) {
     try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-      var nbtTagCompound = NBT_TAG_COMPOUND_CONSTRUCTOR.newInstance();
-
-      ENTITY_PLAYER_SAVE_DATA_METHOD.invoke(CRAFT_PLAYER_GET_HANDLE_METHOD.invoke(player), nbtTagCompound);
+      var nbtTagCompound = ENTITY_PLAYER_SAVE_METHOD.invoke(CRAFT_PLAYER_GET_HANDLE_METHOD.invoke(player), NBT_TAG_COMPOUND_CONSTRUCTOR.newInstance());
       NBT_COMPRESSED_STREAM_TOOLS_TO_OUTPUT_STREAM_METHOD.invoke(null, nbtTagCompound, outputStream);
 
       return outputStream.toByteArray();
