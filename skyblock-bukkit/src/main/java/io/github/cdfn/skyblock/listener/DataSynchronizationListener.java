@@ -108,7 +108,6 @@ public class DataSynchronizationListener implements Listener {
     }
     if (!Arrays.equals(result, serverId)) {
       // This means player just switched to other server.
-      LOGGER.info("Unimplemented onQuit: switching");
       return;
     }
     this.redisConnection.del(formattedLock);
