@@ -15,11 +15,15 @@ import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
 import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
+import io.github.cdfn.skyblock.listener.DataSynchronizationListener;
 import io.github.cdfn.skyblock.messages.handler.ConfigResponseHandler;
-import io.github.cdfn.skyblock.world.loader.RedisLoader;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import kr.entree.spigradle.annotations.PluginMain;
 import org.bukkit.Server;
@@ -40,7 +44,8 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
     this.injector = Guice.createInjector(
         this,
         new RedisModule(this.getDataFolder().toPath()),
-        new OkaeriConfigModule<>(null, WorkerConfig.class)
+        new OkaeriConfigModule<>(null, WorkerConfig.class),
+        binder -> binder.bind(String.class).annotatedWith(Names.named("serverId")).toInstance(this.getServerId())
     );
 
     var client = injector.getInstance(RedisClient.class);
@@ -49,9 +54,9 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
         injector.getInstance(MessageHandlerRegistry.class),
         client
     );
-
     MessagePublisher.get(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
 
+    this.getServer().getPluginManager().registerEvents(injector.getInstance(DataSynchronizationListener.class), this);
     this.setupSlimeWorldManager();
   }
 
@@ -63,8 +68,8 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
     }
 
     this.injector = injector.createChildInjector(binder -> {
-        binder.bind(SlimeLoader.class).toInstance(slimePlugin.getLoader("mysql"));
-        binder.bind(SlimePlugin.class).toInstance(slimePlugin);
+      binder.bind(SlimeLoader.class).toInstance(slimePlugin.getLoader("mysql"));
+      binder.bind(SlimePlugin.class).toInstance(slimePlugin);
     });
   }
 
@@ -82,6 +87,23 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
         ConfigResponse.class,
         injector.getInstance(ConfigResponseHandler.class)
     );
+  }
+
+  private String getServerId() {
+    var serverIdFilePath = this.getDataFolder().toPath().resolve("server_id.bin");
+    var serverIdFile = serverIdFilePath.toFile();
+    try {
+      if (!serverIdFile.exists()) {
+        var random = UUID.randomUUID().toString();
+        Files.write(serverIdFilePath, random.getBytes(StandardCharsets.UTF_8));
+        return random;
+      }
+      return new String(Files.readAllBytes(serverIdFilePath));
+    } catch (IOException e) {
+      this.getSLF4JLogger().error("Error while loading server id, can't start without it.", e);
+      this.getServer().shutdown();
+    }
+    return null;
   }
 
   @Override
