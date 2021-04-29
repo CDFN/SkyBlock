@@ -11,7 +11,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.messages.api.MessageHandlerRegistry;
-import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePubsubListener;
 import io.github.cdfn.skyblock.commons.module.OkaeriConfigModule;
 import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
@@ -19,7 +18,6 @@ import io.github.cdfn.skyblock.messages.handler.ConfigRequestHandler;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
 import java.nio.file.Path;
-import java.util.concurrent.ThreadLocalRandom;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 

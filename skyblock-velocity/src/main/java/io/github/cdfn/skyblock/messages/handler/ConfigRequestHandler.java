@@ -5,7 +5,6 @@ import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.messages.ConfigMessages.ConfigResponse;
 import io.github.cdfn.skyblock.commons.messages.api.AbstractMessageHandler;
-import io.github.cdfn.skyblock.commons.messages.api.MessageHandler;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.lettuce.core.RedisClient;
 import org.slf4j.Logger;

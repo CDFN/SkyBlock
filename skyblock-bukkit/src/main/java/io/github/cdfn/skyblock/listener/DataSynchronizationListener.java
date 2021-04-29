@@ -2,7 +2,6 @@ package io.github.cdfn.skyblock.listener;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages;
 import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages.PlayerDataRequest;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
 import io.github.cdfn.skyblock.commons.messages.util.StringByteCodec;
@@ -123,8 +122,7 @@ public class DataSynchronizationListener implements Listener {
       EntityPlayerDataManager.saveToDatFile(uuid, data);
     } catch (IOException e) {
       LOGGER.error("Failed to save DAT file for UUID {}", uuid, e);
-      event
-          .disallow(Result.KICK_OTHER, Component.text("Failed to load your playerdata. Try again or contact server admin.", NamedTextColor.DARK_RED));
+      event.disallow(Result.KICK_OTHER, Component.text("Failed to load your playerdata. Try again or contact server admin.", NamedTextColor.DARK_RED));
     }
   }
 }
