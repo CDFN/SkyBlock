@@ -24,12 +24,15 @@ services:
       - velocity_secret
     volumes:
       - ./data/velocity:/server
+      - ./velocity-config/plugins:/plugins
       - ./velocity-config/:/config
 
   lobby:
     image: itzg/minecraft-server
     secrets:
       - velocity_secret
+    environment:
+      CFG_SERVER_NAME: "lobby"
     env_file:
       - velocity-config/velocity.env
       - mc-config/mc.env
@@ -41,6 +44,8 @@ services:
     image: itzg/minecraft-server
     secrets:
       - velocity_secret
+    environment:
+      CFG_SERVER_NAME: "mc1"
     env_file:
       - velocity-config/velocity.env
       - mc-config/mc.env
@@ -52,6 +57,8 @@ services:
     image: itzg/minecraft-server
     secrets:
       - velocity_secret
+    environment:
+      CFG_SERVER_NAME: "mc-2"
     env_file:
       - velocity-config/velocity.env
       - mc-config/mc.env
