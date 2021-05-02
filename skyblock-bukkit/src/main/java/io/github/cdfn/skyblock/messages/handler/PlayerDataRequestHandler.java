@@ -1,11 +1,11 @@
 package io.github.cdfn.skyblock.messages.handler;
 
 import com.google.inject.Inject;
-import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages.PlayerDataRequest;
-import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages.PlayerDataResponse;
+import io.github.cdfn.skyblock.messages.PlayerDataMessages.PlayerDataRequest;
+import io.github.cdfn.skyblock.messages.PlayerDataMessages.PlayerDataResponse;
 import io.github.cdfn.skyblock.commons.messages.api.AbstractMessageHandler;
 import io.github.cdfn.skyblock.commons.messages.api.MessagePublisher;
-import io.github.cdfn.skyblock.util.EntityPlayerDataManager;
+import io.github.cdfn.skyblock.util.playerdata.EntityPlayerDataManager;
 import io.lettuce.core.RedisClient;
 import org.bukkit.Server;
 
@@ -28,6 +28,6 @@ public class PlayerDataRequestHandler extends AbstractMessageHandler<PlayerDataR
     if(player == null) {
       return;
     }
-    publisher.publish(new PlayerDataResponse(uuid, EntityPlayerDataManager.readPlayerNBT(player)));
+    publisher.publish(new PlayerDataResponse(uuid, EntityPlayerDataManager.readPlayerData(player)));
   }
 }

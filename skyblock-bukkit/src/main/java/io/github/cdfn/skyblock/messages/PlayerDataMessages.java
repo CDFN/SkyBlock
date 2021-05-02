@@ -1,6 +1,7 @@
-package io.github.cdfn.skyblock.commons.messages;
+package io.github.cdfn.skyblock.messages;
 
 import io.github.cdfn.skyblock.commons.messages.api.MessagePackSerializable;
+import io.github.cdfn.skyblock.util.playerdata.PlayerData;
 import java.io.IOException;
 import java.util.UUID;
 import org.msgpack.core.MessageBufferPacker;
@@ -37,19 +38,30 @@ public class PlayerDataMessages {
 
   public static class PlayerDataResponse implements MessagePackSerializable {
     private UUID uuid;
-    private byte[] data;
+    private PlayerData playerData;
 
-    public PlayerDataResponse(UUID uuid, byte[] data){
+    public PlayerDataResponse(UUID uuid, PlayerData playerData){
       this.uuid = uuid;
-      this.data = data;
+      this.playerData = playerData;
     }
 
     @Override
     public MessageBufferPacker serialize() throws IOException {
       try(var packer = MessagePack.newDefaultBufferPacker()) {
         packer.packString(this.uuid.toString());
-        packer.packArrayHeader(this.data.length);
-        packer.writePayload(this.data);
+
+        var data = this.playerData.getData();
+        packer.packArrayHeader(data.length);
+        packer.writePayload(data);
+
+        var advancements = this.playerData.getAdvancements();
+        packer.packArrayHeader(advancements.length);
+        packer.writePayload(advancements);
+
+        var statistics = this.playerData.getStatistics();
+        packer.packArrayHeader(statistics.length);
+        packer.writePayload(statistics);
+
         return packer;
       }
 
@@ -59,7 +71,11 @@ public class PlayerDataMessages {
     public void deserialize(byte[] bytes) throws IOException {
       try(var unpacker = MessagePack.newDefaultUnpacker(bytes)) {
         this.uuid = UUID.fromString(unpacker.unpackString());
-        this.data = unpacker.readPayload(unpacker.unpackArrayHeader());
+        this.playerData = new PlayerData(
+            unpacker.readPayload(unpacker.unpackArrayHeader()),
+            unpacker.readPayload(unpacker.unpackArrayHeader()),
+            unpacker.readPayload(unpacker.unpackArrayHeader())
+        );
       }
     }
 
@@ -67,8 +83,8 @@ public class PlayerDataMessages {
       return uuid;
     }
 
-    public byte[] getData() {
-      return data;
+    public PlayerData getPlayerData() {
+      return this.playerData;
     }
 
   }

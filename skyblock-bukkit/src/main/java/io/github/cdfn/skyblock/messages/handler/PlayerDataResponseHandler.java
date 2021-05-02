@@ -1,6 +1,6 @@
 package io.github.cdfn.skyblock.messages.handler;
 
-import io.github.cdfn.skyblock.commons.messages.PlayerDataMessages.PlayerDataResponse;
+import io.github.cdfn.skyblock.messages.PlayerDataMessages.PlayerDataResponse;
 import io.github.cdfn.skyblock.commons.messages.api.AbstractMessageHandler;
 import io.github.cdfn.skyblock.listener.DataSynchronizationListener;
 
@@ -12,6 +12,6 @@ public class PlayerDataResponseHandler extends AbstractMessageHandler<PlayerData
     if(cf == null) {
       return;
     }
-    cf.complete(message.getData());
+    cf.complete(message.getPlayerData());
   }
 }
