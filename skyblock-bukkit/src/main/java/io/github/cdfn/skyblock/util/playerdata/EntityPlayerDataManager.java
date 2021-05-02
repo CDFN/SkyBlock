@@ -95,7 +95,6 @@ public class EntityPlayerDataManager {
   }
 
   public static PlayerData readPlayerData(Player player) {
-    var start = System.currentTimeMillis();
     Object entityPlayer;
     try {
       entityPlayer = CRAFT_PLAYER_GET_HANDLE_METHOD.invoke(player);
@@ -143,8 +142,6 @@ public class EntityPlayerDataManager {
 
     try {
       CompletableFuture.allOf(advancementDataFuture, statisticsDataFuture, playerDataFuture).get();
-      var end = System.currentTimeMillis();
-      LOGGER.info("Took {}ms to save all data", end - start);
       return new PlayerData(playerDataFuture.get(), advancementDataFuture.get(), statisticsDataFuture.get());
     } catch (ExecutionException | InterruptedException e) {
       LOGGER.error("error while waiting for {}'s data", player.getName(), e);
