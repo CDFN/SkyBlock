@@ -14,6 +14,7 @@ public class ConfigResponseHandler extends AbstractMessageHandler<ConfigResponse
 
   @Inject
   public ConfigResponseHandler(WorkerConfig workerConfig) {
+    super(true);
     this.workerConfig = workerConfig;
   }
 
