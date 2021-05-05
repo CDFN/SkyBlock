@@ -22,6 +22,4 @@ Yes! I'll do my best to keep `Issues` updated. You can open `Issues` tab and cho
 When you'll be ready, you're more than welcome to create Pull Request with your changes.
 If you'd like to review pull requests instead, head to `Pull requests` and tell us what do you think about changes!
 
-<h6>This project is licensed under [GNU GPL v3][1] </h6>
-
-[1]: https://github.com/CDFN/SkyBlock/blob/master/LICENSE
+#### This project is licensed under [GNU GPL v3](https://github.com/CDFN/SkyBlock/blob/master/LICENSE)
