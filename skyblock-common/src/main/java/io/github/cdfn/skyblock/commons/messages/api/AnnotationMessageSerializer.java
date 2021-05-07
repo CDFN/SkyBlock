@@ -60,7 +60,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
     map.put(String.class, Map.entry(
         SneakyBiConsumer.of((SneakyBiConsumer<MessageBufferPacker, String, IOException>) MessagePacker::packString),
         SneakyFunction.of((SneakyFunction<MessageUnpacker, String, IOException>) MessageUnpacker::unpackString)
-        ));
+    ));
     map.put(byte[].class, Map.entry(
         SneakyBiConsumer.of((SneakyBiConsumer<MessageBufferPacker, byte[], IOException>) (packer, bytes) -> {
           packer.packArrayHeader(bytes.length);
@@ -89,7 +89,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
         }
 
         var strategy = serializationStrategies.get(type).getKey();
-        if(strategy == null) {
+        if (strategy == null) {
           throw new UnsupportedOperationException(String.format("unknown type %s in %s", field.getType().getName(), this.getClass().getName()));
         }
 
@@ -105,7 +105,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
 
   @Override
   default void deserialize(byte[] bytes) {
-    try(var unpacker = MessagePack.newDefaultUnpacker(bytes)){
+    try (var unpacker = MessagePack.newDefaultUnpacker(bytes)) {
       for (Field field : this.getClass().getDeclaredFields()) {
         field.setAccessible(true);
         // Skip fields without MessagePackField annotation
@@ -116,7 +116,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
         Class<?> type = field.getType();
 
         var strategy = serializationStrategies.get(type).getValue();
-        if(strategy == null) {
+        if (strategy == null) {
           throw new UnsupportedOperationException(String.format("unknown type %s in %s", field.getType().getName(), this.getClass().getName()));
         }
 
@@ -124,7 +124,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
         var result = strategy.apply(unpacker);
         field.set(this, result);
       }
-    } catch (IllegalAccessException | IOException e ) {
+    } catch (IllegalAccessException | IOException e) {
       LOGGER.error("Failed to unpack message", e);
     }
   }
