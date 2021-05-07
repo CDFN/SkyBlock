@@ -2,7 +2,6 @@ package io.github.cdfn.skyblock.commons.messages;
 
 import io.github.cdfn.skyblock.commons.messages.api.MessagePackSerializable;
 import java.io.IOException;
-import org.msgpack.core.MessageBufferPacker;
 import org.msgpack.core.MessagePack;
 
 public class ConfigMessages {
@@ -16,10 +15,10 @@ public class ConfigMessages {
     }
 
     @Override
-    public MessageBufferPacker serialize() throws IOException {
+    public byte[] serialize() throws IOException {
       try(var packer = MessagePack.newDefaultBufferPacker()) {
         packer.packInt(this.id);
-        return packer;
+        return packer.toByteArray();
       }
     }
 
@@ -46,11 +45,11 @@ public class ConfigMessages {
     }
 
     @Override
-    public MessageBufferPacker serialize() throws IOException {
+    public byte[] serialize() throws IOException {
       try(var packer = MessagePack.newDefaultBufferPacker()) {
         packer.packInt(this.id);
         packer.packString(this.data);
-        return packer;
+        return packer.toByteArray();
       }
     }
 
