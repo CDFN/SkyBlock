@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 public interface AnnotationMessageSerializer extends MessagePackSerializable {
 
   Logger LOGGER = LoggerFactory.getLogger(AnnotationMessageSerializer.class);
+  // Map<Class, Pair<SerializationStrategy, DeserializationStrategy>>
   Map<Class<?>, Map.Entry<BiConsumer, Function>> serializationStrategies = createStrategies();
 
   static Map<Class<?>, Map.Entry<BiConsumer, Function>> createStrategies() {
@@ -75,6 +76,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
     try (var packer = MessagePack.newDefaultBufferPacker()) {
       for (Field field : this.getClass().getDeclaredFields()) {
         field.setAccessible(true);
+        // Skip fields without MessagePackField annotation
         if (field.getAnnotation(MessagePackField.class) == null) {
           continue;
         }
@@ -91,6 +93,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
           throw new UnsupportedOperationException(String.format("unknown type %s in %s", field.getType().getName(), this.getClass().getName()));
         }
 
+        // Pack object using packer
         strategy.accept(packer, o);
       }
       return packer.toByteArray();
@@ -105,6 +108,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
     try(var unpacker = MessagePack.newDefaultUnpacker(bytes)){
       for (Field field : this.getClass().getDeclaredFields()) {
         field.setAccessible(true);
+        // Skip fields without MessagePackField annotation
         if (field.getAnnotation(MessagePackField.class) == null) {
           continue;
         }
@@ -116,6 +120,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
           throw new UnsupportedOperationException(String.format("unknown type %s in %s", field.getType().getName(), this.getClass().getName()));
         }
 
+        // Unpack value using unpacker and set field's value to unpacked one
         var result = strategy.apply(unpacker);
         field.set(this, result);
       }
