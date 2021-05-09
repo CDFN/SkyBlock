@@ -22,7 +22,7 @@ public class MessagePublisher {
     try {
       commands.publish(
           RedisConfig.PREFIX + className,
-          message.serialize().toByteArray()
+          message.serialize()
       );
     } catch (IOException e) {
       LOGGER.error("error while publishing message {}", className, e);

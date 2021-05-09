@@ -4,7 +4,6 @@ import io.github.cdfn.skyblock.commons.messages.api.MessagePackSerializable;
 import io.github.cdfn.skyblock.util.playerdata.PlayerData;
 import java.io.IOException;
 import java.util.UUID;
-import org.msgpack.core.MessageBufferPacker;
 import org.msgpack.core.MessagePack;
 
 public class PlayerDataMessages {
@@ -17,10 +16,10 @@ public class PlayerDataMessages {
     }
 
     @Override
-    public MessageBufferPacker serialize() throws IOException {
+    public byte[] serialize() throws IOException {
       try(var packer = MessagePack.newDefaultBufferPacker()) {
         packer.packString(this.uuid.toString());
-        return packer;
+        return packer.toByteArray();
       }
     }
 
@@ -46,7 +45,7 @@ public class PlayerDataMessages {
     }
 
     @Override
-    public MessageBufferPacker serialize() throws IOException {
+    public byte[] serialize() throws IOException {
       try(var packer = MessagePack.newDefaultBufferPacker()) {
         packer.packString(this.uuid.toString());
 
@@ -62,7 +61,7 @@ public class PlayerDataMessages {
         packer.packArrayHeader(statistics.length);
         packer.writePayload(statistics);
 
-        return packer;
+        return packer.toByteArray();
       }
 
     }
