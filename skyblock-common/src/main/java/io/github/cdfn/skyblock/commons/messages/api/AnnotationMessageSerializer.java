@@ -81,9 +81,9 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
           continue;
         }
 
-        Object o = field.get(this);
+        Object fieldValue = field.get(this);
         Class<?> type = field.getType();
-        if (o == null) {
+        if (fieldValue == null) {
           packer.packNil();
           continue;
         }
@@ -94,7 +94,7 @@ public interface AnnotationMessageSerializer extends MessagePackSerializable {
         }
 
         // Pack object using packer
-        strategy.accept(packer, o);
+        strategy.accept(packer, fieldValue);
       }
       return packer.toByteArray();
     } catch (IllegalAccessException | IOException e) {
