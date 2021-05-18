@@ -28,7 +28,7 @@ services:
       - ./velocity-config/:/config
 
   lobby:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:java16
     secrets:
       - velocity_secret
     environment:
@@ -41,7 +41,7 @@ services:
       - ./mc-config:/config
 
   mc-1:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:java16
     secrets:
       - velocity_secret
     environment:
@@ -54,7 +54,7 @@ services:
       - ./mc-config:/config
 
   mc-2:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:java16
     secrets:
       - velocity_secret
     environment:
