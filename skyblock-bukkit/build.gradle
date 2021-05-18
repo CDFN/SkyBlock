@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     compileOnly paper("1.16.5")
-    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.5.4-SNAPSHOT'
+    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.6.1-SNAPSHOT'
     implementation('ca.stellardrift.guice-backport:guice:5.0.1') {
         because 'Minecraft uses Guava 21 so we need older Guava version in Guice.'
     }
