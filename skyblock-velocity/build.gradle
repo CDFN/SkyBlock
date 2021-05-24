@@ -18,8 +18,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.velocitypowered:velocity-api:1.1.6-SNAPSHOT'
-    annotationProcessor 'com.velocitypowered:velocity-api:1.1.4-SNAPSHOT'
+    compileOnly 'com.velocitypowered:velocity-api:4.0.0-SNAPSHOT'
+    annotationProcessor 'com.velocitypowered:velocity-api:4.0.0-SNAPSHOT'
     implementation project(':skyblock-common')
 }
 
