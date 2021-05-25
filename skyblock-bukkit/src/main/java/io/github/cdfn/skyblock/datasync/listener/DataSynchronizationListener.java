@@ -127,9 +127,9 @@ public class DataSynchronizationListener implements Listener {
       LOGGER.error("null player data for uuid {}", uuid);
       return;
     }
-    this.redisConnection.set(String.format(DATA_FORMAT, uuid), playerData.getData());
-    this.redisConnection.set(String.format(ADVANCEMENT_FORMAT, uuid), playerData.getAdvancements());
-    this.redisConnection.set(String.format(STATISTICS_FORMAT, uuid), playerData.getStatistics());
+    this.redisConnection.set(String.format(DATA_FORMAT, uuid), playerData.data());
+    this.redisConnection.set(String.format(ADVANCEMENT_FORMAT, uuid), playerData.advancements());
+    this.redisConnection.set(String.format(STATISTICS_FORMAT, uuid), playerData.statistics());
   }
 
 

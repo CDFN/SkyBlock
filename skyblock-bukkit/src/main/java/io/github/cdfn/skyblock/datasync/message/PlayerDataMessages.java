@@ -49,15 +49,15 @@ public class PlayerDataMessages {
       try(var packer = MessagePack.newDefaultBufferPacker()) {
         packer.packString(this.uuid.toString());
 
-        var data = this.playerData.getData();
+        var data = this.playerData.data();
         packer.packArrayHeader(data.length);
         packer.writePayload(data);
 
-        var advancements = this.playerData.getAdvancements();
+        var advancements = this.playerData.advancements();
         packer.packArrayHeader(advancements.length);
         packer.writePayload(advancements);
 
-        var statistics = this.playerData.getStatistics();
+        var statistics = this.playerData.statistics();
         packer.packArrayHeader(statistics.length);
         packer.writePayload(statistics);
 
