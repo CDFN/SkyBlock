@@ -7,6 +7,7 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
+import io.github.cdfn.skyblock.api.SkyblockBukkitPlugin;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.message.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.message.ConfigMessages.ConfigResponse;
@@ -39,7 +40,7 @@ import org.slf4j.Logger;
 
 
 @PluginMain
-public class SkyBlockPlugin extends JavaPlugin implements Module {
+public class SkyBlockPlugin extends JavaPlugin implements Module, SkyblockBukkitPlugin {
 
   private Injector injector;
 
@@ -127,5 +128,10 @@ public class SkyBlockPlugin extends JavaPlugin implements Module {
     binder.bind(BukkitScheduler.class).toInstance(this.getServer().getScheduler());
     binder.bind(PluginManager.class).toInstance(this.getServer().getPluginManager());
     binder.bind(Path.class).annotatedWith(Names.named("data")).toInstance(this.getDataFolder().toPath());
+  }
+
+  @Override
+  public JavaPlugin plugin() {
+    return this;
   }
 }
