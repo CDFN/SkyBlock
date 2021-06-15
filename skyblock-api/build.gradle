@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'kr.entree.spigradle' version '2.2.3'
+    id 'kr.entree.spigradle' version '2.2.4'
 }
 
 group 'io.github.cdfn'
