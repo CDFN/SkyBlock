@@ -15,6 +15,7 @@ import sun.misc.Unsafe;
 public class MessagePubsubListener implements RedisPubSubListener<String, byte[]> {
 
   private static Unsafe unsafe;
+
   static {
     try {
       var field = Unsafe.class.getDeclaredField("theUnsafe");
@@ -54,7 +55,8 @@ public class MessagePubsubListener implements RedisPubSubListener<String, byte[]
       messagePackSerializable.deserialize(message);
 
       registry.callAll(clazz, messagePackSerializable);
-    } catch (ClassNotFoundException | InstantiationException | IOException e) {
+    } catch (ClassNotFoundException ignored) {
+    } catch (InstantiationException | IOException e) {
       LOGGER.error("error while handling message on channel {} with classname {}", channel, className, e);
     }
   }
