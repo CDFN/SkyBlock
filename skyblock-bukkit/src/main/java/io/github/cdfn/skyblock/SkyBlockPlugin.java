@@ -94,7 +94,7 @@ public class SkyBlockPlugin extends JavaPlugin implements Module, SkyblockBukkit
     try {
       if (!serverIdFile.exists()) {
         var random = UUID.randomUUID().toString();
-        Files.write(serverIdFilePath, random.getBytes(StandardCharsets.UTF_8));
+        Files.writeString(serverIdFilePath, random);
         return random;
       }
       return new String(Files.readAllBytes(serverIdFilePath));
