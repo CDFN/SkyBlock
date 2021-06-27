@@ -5,8 +5,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.grinderwolf.swm.api.SlimePlugin;
-import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import io.github.cdfn.skyblock.api.SkyblockBukkitPlugin;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.message.ConfigMessages.ConfigRequest;
@@ -22,6 +20,7 @@ import io.github.cdfn.skyblock.commons.module.redis.RedisModule;
 import io.github.cdfn.skyblock.message.handler.ConfigResponseHandler;
 import io.github.cdfn.skyblock.datasync.message.handler.PlayerDataRequestHandler;
 import io.github.cdfn.skyblock.datasync.message.handler.PlayerDataResponseHandler;
+import io.github.cdfn.skyblock.module.SlimeWorldManagerModule;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisConnectionException;
 import java.io.IOException;
@@ -50,7 +49,8 @@ public class SkyBlockPlugin extends JavaPlugin implements Module, SkyblockBukkit
         this,
         new RedisModule(this.getDataFolder().toPath()),
         new OkaeriConfigModule<>(null, WorkerConfig.class),
-        binder -> binder.bind(String.class).annotatedWith(Names.named("serverId")).toInstance(this.getServerId())
+        binder -> binder.bind(String.class).annotatedWith(Names.named("serverId")).toInstance(this.getServerId()),
+        new SlimeWorldManagerModule(this)
     );
 
     var client = injector.getInstance(RedisClient.class);
@@ -62,20 +62,6 @@ public class SkyBlockPlugin extends JavaPlugin implements Module, SkyblockBukkit
     MessagePublisher.get(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
 
     this.getServer().getPluginManager().registerEvents(injector.getInstance(DataSynchronizationListener.class), this);
-    this.setupSlimeWorldManager();
-  }
-
-  private void setupSlimeWorldManager() {
-    var slimePlugin = (SlimePlugin) this.getServer().getPluginManager().getPlugin("SlimeWorldManager");
-    if (slimePlugin == null) {
-      this.getServer().shutdown();
-      throw new UnknownDependencyException("No SlimeWorldManager found. Install it!");
-    }
-
-    this.injector = injector.createChildInjector(binder -> {
-      binder.bind(SlimeLoader.class).toInstance(slimePlugin.getLoader("mysql"));
-      binder.bind(SlimePlugin.class).toInstance(slimePlugin);
-    });
   }
 
   private void setupMessaging(MessagePubsubListener listener, MessageHandlerRegistry registry, RedisClient client) {
