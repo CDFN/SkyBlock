@@ -90,6 +90,10 @@ public class EntityPlayerDataManager {
     var advancementsFilePath = worldPath.resolve(Path.of("advancements", uuid + ".json"));
     var statisticsFilePath = worldPath.resolve(Path.of("stats", uuid + ".json"));
 
+    Files.createDirectories(playerDataFilePath.getParent());
+    Files.createDirectories(advancementsFilePath.getParent());
+    Files.createDirectories(statisticsFilePath.getParent());
+
     Files.write(playerDataFilePath, playerData.data());
     Files.write(advancementsFilePath, playerData.advancements());
     Files.write(statisticsFilePath, playerData.statistics());
