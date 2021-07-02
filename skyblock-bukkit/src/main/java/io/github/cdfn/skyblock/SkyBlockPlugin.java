@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import io.github.cdfn.skyblock.api.SkyblockBukkitPlugin;
+import io.github.cdfn.skyblock.base.TestListener;
 import io.github.cdfn.skyblock.commons.config.WorkerConfig;
 import io.github.cdfn.skyblock.commons.message.ConfigMessages.ConfigRequest;
 import io.github.cdfn.skyblock.commons.message.ConfigMessages.ConfigResponse;
@@ -45,23 +46,24 @@ public class SkyBlockPlugin extends JavaPlugin implements Module, SkyblockBukkit
 
   @Override
   public void onEnable() {
-    this.injector = Guice.createInjector(
-        this,
-        new RedisModule(this.getDataFolder().toPath()),
-        new OkaeriConfigModule<>(null, WorkerConfig.class),
-        binder -> binder.bind(String.class).annotatedWith(Names.named("serverId")).toInstance(this.getServerId()),
-        new SlimeWorldManagerModule(this)
-    );
+      this.injector = Guice.createInjector(
+          this,
+          new RedisModule(this.getDataFolder().toPath()),
+          new OkaeriConfigModule<>(null, WorkerConfig.class),
+          binder -> binder.bind(String.class).annotatedWith(Names.named("serverId")).toInstance(this.getServerId()),
+          new SlimeWorldManagerModule(this)
+      );
 
-    var client = injector.getInstance(RedisClient.class);
-    this.setupMessaging(
-        injector.getInstance(MessagePubsubListener.class),
-        injector.getInstance(MessageHandlerRegistry.class),
-        client
-    );
-    MessagePublisher.get(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
+      var client = injector.getInstance(RedisClient.class);
+      this.setupMessaging(
+          injector.getInstance(MessagePubsubListener.class),
+          injector.getInstance(MessageHandlerRegistry.class),
+          client
+      );
+      MessagePublisher.get(client).publish(new ConfigRequest(ThreadLocalRandom.current().nextInt()));
 
-    this.getServer().getPluginManager().registerEvents(injector.getInstance(DataSynchronizationListener.class), this);
+      this.getServer().getPluginManager().registerEvents(injector.getInstance(DataSynchronizationListener.class), this);
+      this.getServer().getPluginManager().registerEvents(injector.getInstance(TestListener.class), this);
   }
 
   private void setupMessaging(MessagePubsubListener listener, MessageHandlerRegistry registry, RedisClient client) {

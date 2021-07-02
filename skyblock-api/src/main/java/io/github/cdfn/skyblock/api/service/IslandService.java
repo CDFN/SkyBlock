@@ -7,6 +7,6 @@ import java.util.concurrent.CompletableFuture;
 public interface IslandService {
   CompletableFuture<Island> createIsland(String name, UUID owner);
   CompletableFuture<Island> loadIsland(String name);
-  CompletableFuture<Void> unloadIsland();
-  CompletableFuture<Void> deleteIsland();
+  CompletableFuture<Void> unloadIsland(String name);
+  CompletableFuture<Void> deleteIsland(String name);
 }
