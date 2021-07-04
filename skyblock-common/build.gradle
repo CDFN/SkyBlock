@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    api 'io.lettuce:lettuce-core:6.1.2.RELEASE'
+    api 'io.lettuce:lettuce-core:6.1.3.RELEASE'
     api 'eu.okaeri:okaeri-configs-hjson:2.7.20'
     api 'eu.okaeri:okaeri-configs-validator-okaeri:2.7.20'
     api('ca.stellardrift.guice-backport:guice:5.0.1') {
