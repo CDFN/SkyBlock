@@ -7,6 +7,7 @@ group 'io.github.cdfn'
 version '1.0.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     paper()
     maven {
@@ -25,10 +26,14 @@ repositories {
         name = "glare"
         url = "https://repo.glaremasters.me/repository/concuncan/"
     }
+    maven {
+        name = "#onlypanda"
+        url = "https://repo.panda-lang.org/"
+    }
 }
 
 dependencies {
-    compileOnly paper("1.16.5")
+    compileOnly 'io.papermc.paper:paper:1.17.1-R0.1-SNAPSHOT'
     compileOnly 'com.grinderwolf:slimeworldmanager-api:2.6.2-SNAPSHOT'
     implementation 'de.themoep:minedown-adventure:1.7.1-SNAPSHOT'
     implementation 'eu.okaeri:okaeri-persistence-jdbc:1.5.1'
