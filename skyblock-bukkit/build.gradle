@@ -7,7 +7,6 @@ group 'io.github.cdfn'
 version '1.0.0'
 
 repositories {
-    mavenLocal()
     mavenCentral()
     paper()
     maven {
@@ -27,8 +26,8 @@ repositories {
         url = "https://repo.glaremasters.me/repository/concuncan/"
     }
     maven {
-        name = "#onlypanda"
-        url = "https://repo.panda-lang.org/"
+        name = "cdfn-repo"
+        url = "https://maven.cdfn.dev/"
     }
 }
 
