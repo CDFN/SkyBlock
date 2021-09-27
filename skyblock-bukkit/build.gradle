@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper:1.17.1-R0.1-SNAPSHOT'
-    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.6.2-SNAPSHOT'
+    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.6.2-archon-SNAPSHOT'
     implementation 'de.themoep:minedown-adventure:1.7.1-SNAPSHOT'
     implementation 'eu.okaeri:okaeri-persistence-jdbc:1.5.1'
     implementation project(':skyblock-common')
