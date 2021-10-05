@@ -1,6 +1,6 @@
 plugins {
     id 'kr.entree.spigradle' version '2.2.4'
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id "com.github.johnrengelman.shadow" version "7.1.0"
 }
 
 group 'io.github.cdfn'
