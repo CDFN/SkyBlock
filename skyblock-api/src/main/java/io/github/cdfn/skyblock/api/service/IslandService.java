@@ -9,4 +9,5 @@ public interface IslandService {
   CompletableFuture<Island> loadIsland(String name);
   CompletableFuture<Void> unloadIsland();
   CompletableFuture<Void> deleteIsland();
+  CompletableFuture<Island> getIsland(String name);
 }
