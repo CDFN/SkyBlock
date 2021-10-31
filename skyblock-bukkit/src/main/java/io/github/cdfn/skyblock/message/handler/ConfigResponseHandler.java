@@ -7,15 +7,9 @@ import io.github.cdfn.skyblock.commons.message.api.handler.MessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConfigResponseHandler implements MessageHandler<ConfigResponse> {
+public record ConfigResponseHandler(@Inject WorkerConfig workerConfig) implements MessageHandler<ConfigResponse> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigResponseHandler.class);
-  private final WorkerConfig workerConfig;
-
-  @Inject
-  public ConfigResponseHandler(WorkerConfig workerConfig) {
-    this.workerConfig = workerConfig;
-  }
 
   @Override
   public void accept(ConfigResponse configResponse) {
