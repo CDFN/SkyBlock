@@ -99,7 +99,7 @@ public class EntityPlayerDataManager {
     CompletableFuture<byte[]> playerDataFuture = CompletableFuture.supplyAsync(() -> {
       try (var outputStream = new ByteArrayOutputStream()) {
         var nbtTagCompound = entityPlayer.save(new NBTTagCompound());
-        // We dont want to persist player's location, defaults to 0/0/0 when loaded
+        // We don't want to persist player's location, defaults to 0/0/0 when loaded
         nbtTagCompound.remove("Pos");
         NBTCompressedStreamTools.a(nbtTagCompound, outputStream);
 
