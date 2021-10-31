@@ -58,13 +58,13 @@ public class DataSynchronizationListener implements Listener {
     var formattedStatistics = String.format(STATISTICS_FORMAT, uuid);
 
     // Fetch previous lock before creating new one. We'll use it to distinguish whether player
-    // is switching from other server or not
+    // is switching from other server or not.
     var existingLock = this.redisConnection.get(formattedLock);
     // Update lock for new server
     this.redisConnection.set(formattedLock, this.serverId);
 
     if (existingLock == null) {
-      // Load playerdata from redis as player joins from "outside" (isn't switching from other server)
+      // Load playerdata from redis as player joins from "outside" (isn't switching from other server).
       var data = this.redisConnection.get(formattedData);
       var advancementsData = this.redisConnection.get(formattedAdvancements);
       var statisticsData = this.redisConnection.get(formattedStatistics);
@@ -85,7 +85,7 @@ public class DataSynchronizationListener implements Listener {
     try {
       playerData = cf.get(2, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException e) {
-      // Error while waiting for data
+      // Error while waiting for data.
       LOGGER.error("error while waiting for playerdata for UUID {}", uuid, e);
       event.disallow(Result.KICK_OTHER, Component.text("Failed to load your data. Join again or contact server admin.", NamedTextColor.DARK_RED));
       return;
