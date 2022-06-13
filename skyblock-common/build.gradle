@@ -16,7 +16,7 @@ repositories {
 dependencies {
     api 'io.lettuce:lettuce-core:6.1.6.RELEASE'
     api 'eu.okaeri:okaeri-configs-hjson:3.4.2'
-    api 'eu.okaeri:okaeri-configs-validator-okaeri:3.4.2'
+    api 'eu.okaeri:okaeri-configs-validator-okaeri:4.0.4'
     api('ca.stellardrift.guice-backport:guice:5.0.1') {
         because 'Minecraft uses Guava 21 so we need older Guava version in Guice.'
     }
